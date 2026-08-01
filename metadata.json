@@ -1,0 +1,6 @@
+{
+  "name": "PDF Reader & Tools",
+  "description": "Fast, privacy-first PDF reader, annotator, editor, signer, and AI assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
