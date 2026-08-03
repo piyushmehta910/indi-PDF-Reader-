@@ -25,13 +25,29 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '9.3.1'
-        # By specifying gradle-version, the setup-gradle action installs and configures
-        # Gradle directly, bypassing the need for committed gradlew wrapper files in the repository.
+
+      - name: Verify Gradle Wrapper JAR
+        run: |
+          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
+            echo "Error: gradle/wrapper/gradle-wrapper.jar does not exist!"
+            exit 1
+          fi
+          if [ ! -s gradle/wrapper/gradle-wrapper.jar ]; then
+            echo "Error: gradle/wrapper/gradle-wrapper.jar is empty!"
+            exit 1
+          fi
+          # Verify that the jar can be read and is not corrupted
+          jar tf gradle/wrapper/gradle-wrapper.jar >/dev/null || {
+            echo "Error: gradle/wrapper/gradle-wrapper.jar is invalid or corrupted!"
+            exit 1
+          }
+          echo "Gradle Wrapper JAR is valid."
+
+      - name: Grant Execute Permission to Gradlew
+        run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: gradle assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
