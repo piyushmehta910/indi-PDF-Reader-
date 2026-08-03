@@ -25,16 +25,13 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-        # The gradle/actions/setup-gradle action handles:
-        # - Automatic caching/restoring of Gradle User Home (dependencies, wrappers, etc.)
-        # - Generation of build scans
-        # - Integration with the GitHub Action runner environment
-
-      - name: Grant Execute Permission to Gradlew
-        run: chmod +x gradlew
+        with:
+          gradle-version: '9.3.1'
+        # By specifying gradle-version, the setup-gradle action installs and configures
+        # Gradle directly, bypassing the need for committed gradlew wrapper files in the repository.
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: gradle assembleDebug
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
